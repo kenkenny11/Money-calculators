@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Car Insurance Cost Calculator — Estimate Your Rate by State (2026)</title>
+<meta name="description" content="Free car insurance cost calculator. Estimate monthly and yearly car insurance by state, age, car value and coverage level. All 50 US states, instant, no signup.">
+<style>*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif;background:#0f172a;color:#f8fafc;padding:24px 16px;line-height:1.6}
+.wrap{max-width:620px;margin:0 auto}
+h1{font-size:1.8rem;font-weight:800;letter-spacing:-0.02em;margin-bottom:6px;color:#fff}
+.sub{color:#94a3b8;font-size:0.95rem;margin-bottom:24px}
+.card{background:#1e293b;border:1px solid #334155;border-radius:16px;padding:22px;margin-bottom:20px}
+label{display:block;font-size:0.85rem;font-weight:600;color:#cbd5e1;text-transform:uppercase;letter-spacing:0.04em;margin:14px 0 6px}
+input,select{width:100%;padding:13px 14px;background:#0f172a;border:1px solid #475569;border-radius:10px;font-size:1.05rem;color:#fff;outline:none}
+input:focus,select:focus{border-color:#38bdf8}
+button{width:100%;margin-top:18px;padding:14px;background:#2563eb;color:#fff;border:none;border-radius:10px;font-size:1.05rem;font-weight:700;cursor:pointer;transition:background .2s}
+button:hover{background:#1d4ed8}
+.results{display:none;margin-top:20px;padding-top:16px;border-top:1px solid #334155}
+.res{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #334155;font-size:1rem;color:#cbd5e1}
+.res b{color:#38bdf8;font-size:1.2rem}
+.res.big{border-bottom:2px solid #38bdf8;padding-bottom:12px;margin-bottom:8px}
+.res.big b{font-size:1.8rem;color:#4ade80}
+.faq h2{font-size:1.15rem;color:#fff;margin:18px 0 6px}
+.faq p{color:#94a3b8;font-size:0.92rem;margin-bottom:10px}
+.tools a{display:block;background:#1e293b;border:1px solid #334155;border-radius:12px;padding:16px;margin-bottom:10px;color:#f8fafc;text-decoration:none;font-weight:600}
+.tools a:hover{border-color:#38bdf8}
+.tools small{display:block;color:#94a3b8;font-weight:400;margin-top:2px}
+footer{text-align:center;color:#64748b;font-size:0.8rem;padding:24px 0}
+footer a{color:#64748b}</style>
+</head>
+<body>
+<div class="wrap">
+<h1>Car Insurance Cost Calculator</h1>
+<p class="sub">Estimate what you should pay for full coverage. All 50 states.</p>
+<div class="card">
+<label>US state</label>
+<select id="st"><option>Alabama</option><option>Alaska</option><option>Arizona</option><option>Arkansas</option><option>California</option><option>Colorado</option><option>Connecticut</option><option>Delaware</option><option>Florida</option><option>Georgia</option><option>Hawaii</option><option>Idaho</option><option>Illinois</option><option>Indiana</option><option>Iowa</option><option>Kansas</option><option>Kentucky</option><option>Louisiana</option><option>Maine</option><option>Maryland</option><option>Massachusetts</option><option>Michigan</option><option>Minnesota</option><option>Mississippi</option><option>Missouri</option><option>Montana</option><option>Nebraska</option><option>Nevada</option><option>New Hampshire</option><option>New Jersey</option><option>New Mexico</option><option>New York</option><option>North Carolina</option><option>North Dakota</option><option>Ohio</option><option>Oklahoma</option><option>Oregon</option><option>Pennsylvania</option><option>Rhode Island</option><option>South Carolina</option><option>South Dakota</option><option>Tennessee</option><option>Texas</option><option>Utah</option><option>Vermont</option><option>Virginia</option><option>Washington</option><option>West Virginia</option><option>Wisconsin</option><option>Wyoming</option><option>Washington DC</option></select>
+<label>Driver age</label>
+<input type="number" id="age" placeholder="e.g. 30" min="16">
+<label>Car value</label>
+<input type="number" id="car" placeholder="e.g. 22000" step="500">
+<label>Coverage level</label>
+<select id="cov">
+<option value="1">State minimum</option>
+<option value="1.35" selected>Full coverage</option>
+<option value="1.55">Full coverage, low deductible</option>
+</select>
+<label>Credit profile</label>
+<select id="cred">
+<option value="0.9">Good</option>
+<option value="1" selected>Average</option>
+<option value="1.2">Poor</option>
+</select>
+<button onclick="calc()">Estimate My Rate</button>
+<div class="results" id="out"></div>
+</div>
+<div class="card faq">
+<h2>How much is car insurance per month?</h2>
+<p>The US average for full coverage is roughly <b>140 dollars per month</b> (about 1,660 per year), but your actual rate swings hugely by state, age and driving record. A 45-year-old in Maine might pay 90. A 19-year-old in Michigan might pay over 400.</p>
+<h2>What drives your car insurance rate?</h2>
+<p>The five biggest factors: <b>your state</b> (Florida and Louisiana cost the most, Maine and Vermont the least), <b>your age</b> (under 25 can double the rate), <b>your driving record</b>, <b>your credit profile</b> (in most states), and <b>your coverage level</b>. Car value matters less than people think.</p>
+<h2>How can I pay less for car insurance?</h2>
+<p>Shop quotes from at least 3 insurers every year, rates for the exact same driver vary by over 1,000 dollars between companies. Also: raise your deductible, bundle with home or renters insurance, ask about low-mileage and good-student discounts.</p>
+<h2>Is this estimate exact?</h2>
+<p>No. It is a ballpark based on state averages and major rating factors. Insurers use dozens of variables. Use it to know what a fair price looks like before you get real quotes.</p>
+</div>
+</div>
+<footer><a href="index.html">All money calculators</a></footer>
+<script>var STATE_MULT = {"Alabama": 1.0, "Alaska": 0.95, "Arizona": 1.15, "Arkansas": 1.0, "California": 1.25, "Colorado": 1.2, "Connecticut": 1.15, "Delaware": 1.1, "Florida": 1.4, "Georgia": 1.2, "Hawaii": 0.85, "Idaho": 0.8, "Illinois": 0.95, "Indiana": 0.9, "Iowa": 0.8, "Kansas": 0.9, "Kentucky": 1.1, "Louisiana": 1.5, "Maine": 0.75, "Maryland": 1.1, "Massachusetts": 1.05, "Michigan": 1.3, "Minnesota": 1.0, "Mississippi": 1.05, "Missouri": 1.1, "Montana": 0.9, "Nebraska": 0.95, "Nevada": 1.2, "New Hampshire": 0.8, "New Jersey": 1.3, "New Mexico": 1.0, "New York": 1.35, "North Carolina": 0.8, "North Dakota": 0.8, "Ohio": 0.85, "Oklahoma": 1.0, "Oregon": 1.05, "Pennsylvania": 1.0, "Rhode Island": 1.2, "South Carolina": 1.05, "South Dakota": 0.8, "Tennessee": 1.0, "Texas": 1.15, "Utah": 1.05, "Vermont": 0.75, "Virginia": 0.95, "Washington": 1.1, "West Virginia": 0.95, "Wisconsin": 0.8, "Wyoming": 0.85, "Washington DC": 1.45};
+var AGE_MULT = [[20,2.1],[25,1.5],[30,1.1],[40,1.0],[50,0.95],[60,1.0],[65,1.1]];
+var BASE = 1660;
+function fmt(n){return "$"+Math.round(n).toLocaleString("en-US");}
+function ageMult(a){
+if(a<20)return 2.3;
+for(var i=0;i<AGE_MULT.length;i++){if(a<=AGE_MULT[i][0])return AGE_MULT[i][1];}
+return 1.15;
+}
+function calc(){
+var st=document.getElementById("st").value;
+var a=parseInt(document.getElementById("age").value);
+if(!a||a<16){alert("Enter a valid driver age");return;}
+var car=parseFloat(document.getElementById("car").value)||22000;
+var cov=parseFloat(document.getElementById("cov").value);
+var cred=parseFloat(document.getElementById("cred").value);
+var carAdj=Math.max(0.85,car/22000*0.95);
+var yr=BASE*STATE_MULT[st]*ageMult(a)*cov*cred*carAdj;
+document.getElementById("out").innerHTML=
+'<div class="res big"><span>Estimated yearly</span><b>'+fmt(yr)+'</b></div>'
++'<div class="res"><span>Per month</span><b>'+fmt(yr/12)+'</b></div>'
++'<div class="res"><span>State average, full coverage</span><b>'+fmt(BASE*STATE_MULT[st])+'</b></div>'
++'<div class="res"><span>Good drivers might pay</span><b>'+fmt(yr*0.8)+'</b></div>';
+document.getElementById("out").style.display="block";
+}</script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stamp Duty Calculator UK — England and NI (2026 Rates)</title>
+<meta name="description" content="Free UK stamp duty calculator for England and Northern Ireland. First-time buyer relief and additional property surcharge included. Instant, no signup.">
+<style>*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif;background:#0f172a;color:#f8fafc;padding:24px 16px;line-height:1.6}
+.wrap{max-width:620px;margin:0 auto}
+h1{font-size:1.8rem;font-weight:800;letter-spacing:-0.02em;margin-bottom:6px;color:#fff}
+.sub{color:#94a3b8;font-size:0.95rem;margin-bottom:24px}
+.card{background:#1e293b;border:1px solid #334155;border-radius:16px;padding:22px;margin-bottom:20px}
+label{display:block;font-size:0.85rem;font-weight:600;color:#cbd5e1;text-transform:uppercase;letter-spacing:0.04em;margin:14px 0 6px}
+input,select{width:100%;padding:13px 14px;background:#0f172a;border:1px solid #475569;border-radius:10px;font-size:1.05rem;color:#fff;outline:none}
+input:focus,select:focus{border-color:#38bdf8}
+button{width:100%;margin-top:18px;padding:14px;background:#2563eb;color:#fff;border:none;border-radius:10px;font-size:1.05rem;font-weight:700;cursor:pointer;transition:background .2s}
+button:hover{background:#1d4ed8}
+.results{display:none;margin-top:20px;padding-top:16px;border-top:1px solid #334155}
+.res{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #334155;font-size:1rem;color:#cbd5e1}
+.res b{color:#38bdf8;font-size:1.2rem}
+.res.big{border-bottom:2px solid #38bdf8;padding-bottom:12px;margin-bottom:8px}
+.res.big b{font-size:1.8rem;color:#4ade80}
+.faq h2{font-size:1.15rem;color:#fff;margin:18px 0 6px}
+.faq p{color:#94a3b8;font-size:0.92rem;margin-bottom:10px}
+.tools a{display:block;background:#1e293b;border:1px solid #334155;border-radius:12px;padding:16px;margin-bottom:10px;color:#f8fafc;text-decoration:none;font-weight:600}
+.tools a:hover{border-color:#38bdf8}
+.tools small{display:block;color:#94a3b8;font-weight:400;margin-top:2px}
+footer{text-align:center;color:#64748b;font-size:0.8rem;padding:24px 0}
+footer a{color:#64748b}</style>
+</head>
+<body>
+<div class="wrap">
+<h1>Stamp Duty Calculator (UK)</h1>
+<p class="sub">England and Northern Ireland rates. First-time buyer and additional property aware.</p>
+<div class="card">
+<label>Property price, pounds</label>
+<input type="number" id="price" placeholder="e.g. 425000" step="1000">
+<label>Buyer type</label>
+<select id="buyer">
+<option value="std">Standard buyer</option>
+<option value="ftb">First-time buyer</option>
+</select>
+<label>Additional property? (second home or buy-to-let)</label>
+<select id="add">
+<option value="no">No</option>
+<option value="yes">Yes, it is an additional property</option>
+</select>
+<button onclick="calc()">Calculate Stamp Duty</button>
+<div class="results" id="out"></div>
+</div>
+<div class="card faq">
+<h2>How much is stamp duty in the UK?</h2>
+<p>In England and Northern Ireland, standard buyers pay nothing on the first 125,000 pounds, then 2 percent up to 250,000, 5 percent up to 925,000, 10 percent up to 1.5 million and 12 percent above. Only the slice of price inside each band pays that band rate.</p>
+<h2>What is the first-time buyer relief?</h2>
+<p>First-time buyers pay nothing up to 300,000 pounds and 5 percent on the slice up to 500,000. Above 500,000 the relief disappears and standard rates apply to the whole price.</p>
+<h2>What is the additional property surcharge?</h2>
+<p>Buying a second home or buy-to-let adds a 5 percent surcharge on top of the standard rates. Scotland uses LBTT and Wales uses LTT, which have different bands, so this calculator covers England and NI only.</p>
+</div>
+</div>
+<footer><a href="index.html">All money calculators</a></footer>
+<script>function fmt(n){return Math.round(n).toLocaleString("en-US");}
+function calc(){
+var price=parseFloat(document.getElementById("price").value);
+if(!price||price<=0){alert("Enter a valid property price");return;}
+var ftb=document.getElementById("buyer").value==="ftb";
+var add=document.getElementById("add").value==="yes";
+var use;
+if(ftb){
+if(price<=500000){use=[[300000,0],[500000,5],[10**12,15]];}
+else{use=[[125000,0],[250000,2],[925000,5],[1500000,10],[10**12,12]];}
+}else{
+use=[[125000,0],[250000,2],[925000,5],[1500000,10],[10**12,12]];
+}
+var tax=0,prev=0;
+for(var i=0;i<use.length;i++){
+var cap=use[i][0],rate=use[i][1];
+if(price>prev){var t=Math.min(price,cap)-prev;if(t>0){tax+=t*rate/100;}}
+prev=cap;
+}
+if(add){tax+=price*0.05;}
+var eff=tax/price*100;
+document.getElementById("out").innerHTML=
+'<div class="res big"><span>Stamp duty owed</span><b>£'+fmt(tax)+'</b></div>'
++'<div class="res"><span>Effective rate</span><b>'+eff.toFixed(2)+' percent</b></div>'
++'<div class="res"><span>Total cash needed (price plus duty)</span><b>£'+fmt(price+tax)+'</b></div>';
+document.getElementById("out").style.display="block";
+}</script>
+</body>
+</html>
